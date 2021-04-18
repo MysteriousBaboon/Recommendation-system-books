@@ -35,17 +35,20 @@ def predict_review(user_id, book_title, model, metadata):
     return review_prediction.est
 
 
-def generate_recommendation(user_id: int, model, metadata: pd.DataFrame, number_recommendation: int, thresh=4):
+def generate_recommendation(connection, user_id: int, model, number_recommendation: int, thresh=4):
+    df = pd.read_sql(
+        f"SELECT ratings.user_id, books.best_book_id, books.authors, books.original_publication_year, books.language_code, books.title, books.average_rating, books.image_url FROM ratings INNER JOIN books on ratings.book_id = books.book_id  WHERE ratings.user_id={user_id}",
+        connection)
 
-    book_titles = list(metadata['title'].values)
+    book_titles = list(df['title'].values)
     random.shuffle(book_titles)
     recommended_books = []
 
     for book_title in book_titles:
-        rating = predict_review(user_id, book_title, model, metadata)
+        rating = predict_review(user_id, book_title, model, df)
         if rating >= thresh:
             if len(recommended_books) < number_recommendation:
-                book_id = get_book_id(book_title, metadata)
-                recommended_books.append(get_book_info(book_id, metadata))
+                book_id = get_book_id(book_title, df)
+                recommended_books.append(get_book_info(book_id, df))
 
     return recommended_books

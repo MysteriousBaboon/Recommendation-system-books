@@ -16,5 +16,15 @@
 </div>
 {% endfor %}
 
+
+<h1> Books you might want to read: </h1>
+{% for book in to_read %}
+<div>
+    <h2> {{book.title}}</h2>
+    <p>  by {{book.authors}}</p>
+    <p>  released in {{book.original_publication_year}}</p>
+    <img src="{{book.image_url}}">
+</div>
+{% endfor %}
 </body>
 </html>
