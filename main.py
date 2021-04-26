@@ -4,7 +4,7 @@ import mysql.connector as con
 from jinja2 import Environment, FileSystemLoader
 
 # User ID wanted for prediction
-wanted_id = 2
+wanted_id = 4
 
 # Connection to the database
 connection = con.connect(host='localhost', database='goodreads', user='mark', password='19991999')
@@ -17,6 +17,8 @@ if connection.is_connected():
 def recommender(number_recommendation=5):
     collab = collaborative.generate_recommendation(connection, wanted_id, number_recommendation)
     plan_to_read, tag = to_read.generate_recommendation(connection, wanted_id, number_recommendation)
+    print(plan_to_read)
+    print(collab)
     file_loader = FileSystemLoader('templates')
     env = Environment(loader=file_loader)
     open("result.html", "w").write(env.get_template("template.html").render(collab=collab, to_read=plan_to_read, tag=tag))

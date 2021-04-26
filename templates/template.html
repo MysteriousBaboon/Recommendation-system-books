@@ -16,7 +16,7 @@
 </div>
 {% endfor %}
 
-
+{% if tag %}
 <h1> Books you might want to read based on your taste for the tag <b>"{{tag}}"</b>: </h1>
 {% for book in to_read %}
 <div>
@@ -26,5 +26,18 @@
     <img src="{{book.image_url}}">
 </div>
 {% endfor %}
+
+{% else %}
+<h1> For new users: </h1>
+{% for book in to_read %}
+<div>
+    <h2> {{book.title}}</h2>
+    <p>  by {{book.authors}}</p>
+    <p>  released in {{book.original_publication_year}}</p>
+    <img src="{{book.image_url}}">
+</div>
+{% endfor %}
+{% endif %}
+
 </body>
 </html>

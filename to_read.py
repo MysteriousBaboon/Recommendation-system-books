@@ -1,14 +1,13 @@
 import pandas
 import pandas as pd
 import collaborative as collab
-
+import popularity
 
 def generate_recommendation(connection, user_id: int, number_recommendation: int):
     """
     Create a To_Read list of the favorite user's tag
     """
-    pandas.set_option('display.max_rows',None)
-    pandas.set_option('display.max_columns',None)
+
     tag = None
     # Get all tag id for the to read of our user
     try:
@@ -24,10 +23,10 @@ def generate_recommendation(connection, user_id: int, number_recommendation: int
                           connection)
         tag = df.tag_name.value_counts()[:1].index.tolist()[0]
         tag = str(tag)
-
     except:
-        print("not enough data on User")
-        return [], tag
+        df = popularity.generate_recommendation(connection)
+        df = df.to_dict(orient='records')
+        return df, None
     # Sort by rating to get the best one
     df = df.sort_values(by=['average_rating'], ascending=False)
     result = collab.clean_recommendation(df, user_id)
