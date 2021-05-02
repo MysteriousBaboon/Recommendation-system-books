@@ -21,12 +21,16 @@ if connection.is_connected():
 def recommender(number_recommendation=5):
     # Collaborative Filtering
     collab = collaborative.generate_recommendation(connection, wanted_id, number_recommendation)
-
+    # Plan to read using tag and Collaborative Filtering
     plan_to_read, tag = to_read.generate_recommendation(connection, wanted_id, number_recommendation)
-    print(plan_to_read)
-    print(collab)
+
+    # Open the folder templates
     file_loader = FileSystemLoader('templates')
     env = Environment(loader=file_loader)
+    # Write a Html page based on template.html and passing it the List of books that passed through
+    # - Collaborative filtering
+    # - To Read Collaborative filtering (if there is no tag, pass Popularity instead)
+    # - And the best tag
     open("result.html", "w").write(env.get_template("template.html").render(collab=collab, to_read=plan_to_read, tag=tag))
 
 
