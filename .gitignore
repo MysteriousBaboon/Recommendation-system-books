@@ -1,4 +1,5 @@
 venv/
 *.xml
 .idea/
-svdpickle_file
+svdpickle.pt
+credentials

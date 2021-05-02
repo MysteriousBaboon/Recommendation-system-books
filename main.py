@@ -6,8 +6,12 @@ from jinja2 import Environment, FileSystemLoader
 # User ID wanted for prediction
 wanted_id = 4
 
+# Get Database Credentials
+f = open("credentials", "r")
+credentials = f.readlines()
+
 # Connection to the database
-connection = con.connect(host='localhost', database='goodreads', user='mark', password='19991999')
+connection = con.connect(host='localhost', database='goodreads', user=credentials[2], password=credentials[3])
 if connection.is_connected():
     db_Info = connection.get_server_info()
     print("Connected to MySQL Server version ", db_Info)
@@ -15,7 +19,9 @@ if connection.is_connected():
 
 # Main Recommender function
 def recommender(number_recommendation=5):
+    # Collaborative Filtering
     collab = collaborative.generate_recommendation(connection, wanted_id, number_recommendation)
+
     plan_to_read, tag = to_read.generate_recommendation(connection, wanted_id, number_recommendation)
     print(plan_to_read)
     print(collab)

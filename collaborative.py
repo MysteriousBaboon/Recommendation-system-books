@@ -5,13 +5,13 @@ import pickle
 import pandas as pd
 
 # Loading of the model
-model = pickle.load(open('svdpickle_file', 'rb'))
+model = pickle.load(open('svdpickle.pt', 'rb'))
+
 
 def get_book_id(book_title, metadata):
     """
     Gets the book ID for a book title based on the closest match in the metadata dataframe.
     """
-
     existing_titles = list(metadata['title'].values)
     closest_titles = difflib.get_close_matches(book_title, existing_titles)
     book_id = metadata[metadata['title'] == closest_titles[0]]['best_book_id'].values[0]
